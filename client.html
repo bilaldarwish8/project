@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="index.js"></script>
+    <h1 style="color: red;">USERS DETAILS</h1>
+</head>
+<body>
+    <span>Email : </span> <br>
+    <input type="text" , id="Email", placeholder="Example@gmail.com" > <br>
+    <span>Password :</span> <br>
+    <input type="password" , id="Pass" , placeholder="Password"> <br><hr>
+    <div id="001"></div>
+    <button type="button" class="btn btn-outline-primary" id="003">get user</button>
+    <button type="button" class="btn btn-outline-primary" id="002">add user</button>
+    <script>
+        let bilal = document.getElementById('001')
+        let augi = document.getElementById('002')
+        let rs = document.getElementById("003")
+    </script>
+    <script>
+        document.getElementById("002").onclick = Adduser;
+        function Adduser() 
+        {
+            var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+    "email": document.getElementById("Email").value,
+    "password": document.getElementById("Pass").value
+
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("http://localhost:3000/Adduser", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+        }
+    </script>
+
+
+    <script>
+        document.getElementById("003").onclick = getuser;
+        function getuser()
+        {
+            var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("http://localhost:3000/Users", requestOptions)
+	.then(response => response.json())
+	.then(data => {
+                var output = document.getElementById("output");
+                output.innerHTML = '';
+
+                if(data.length == 0){
+                    output.innerHTML = "<br><b>There are no users in the excel file.</b>";
+                }
+                else{
+                    var output = document.getElementById("output");
+                    var ul = document.createElement('ul');
+                    ul.setAttribute("id","mainUL");
+                    output.appendChild(ul);
+                    
+                    for(var i=0; i < data.length; i++){
+                        
+                        var myli = document.createElement("li")
+                        myli.innerHTML = data[i]["email"];
+                        ul.appendChild(myli);
+                    }
+                    console.log(data)
+                }
+                
+
+            })
+
+
+
+
+
+  .catch(error => console.log('error', error));
+       }
+      
+    </script>
+
+<div id="output"></div>
+
+   
+
+ 
+    
+    
+    
+</body>
+</html>
